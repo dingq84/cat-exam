@@ -1,14 +1,38 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Landing from "@/views/Landing.vue";
 
-Vue.use(VueRouter);
+import isMobile from "@/utils/isMobile";
+import MobileLanding from "@/views/mobile/Landing.vue";
+
+const mobile = isMobile();
 
 const routes = [
   {
     path: "/",
     name: "Landing",
-    component: Landing,
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+    beforeEnter: (to, from, next) => {
+      if (mobile) {
+        next("/m");
+        return;
+      }
+
+      next();
+    },
+  },
+  {
+    path: "/m",
+    name: "MobileLanding",
+    component: MobileLanding,
+    beforeEnter: (to, from, next) => {
+      if (mobile === false) {
+        next("/");
+        return;
+      }
+
+      next();
+    },
   },
   {
     path: "/about",
@@ -27,4 +51,5 @@ const router = new VueRouter({
   routes,
 });
 
+Vue.use(VueRouter);
 export default router;

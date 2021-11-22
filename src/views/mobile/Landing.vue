@@ -99,7 +99,7 @@ export default {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url("../assets/backgrounds/people.png");
+    background-image: url("../../assets/backgrounds/people.png");
   }
 
   &-wrapper {
@@ -126,7 +126,7 @@ export default {
         height: 65px;
         border-top-right-radius: 2px;
         border-bottom-right-radius: 2px;
-        background: url("../assets/logo-white.png"),
+        background: url("../../assets/logo-white.png"),
           linear-gradient($gold, $gold);
         background-position: center center, left center;
         background-repeat: no-repeat, repeat;
@@ -258,7 +258,7 @@ export default {
       left: 0;
       bottom: 23.2px;
       height: 37.5px;
-      background-image: url("../assets/backgrounds/line.png");
+      background-image: url("../../assets/backgrounds/line.png");
     }
   }
 }
