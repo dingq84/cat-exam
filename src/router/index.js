@@ -22,12 +22,42 @@ const routes = [
     },
   },
   {
+    path: "/ending",
+    name: "Ending",
+    component: () =>
+      import(/* webpackChunkName: "Ending" */ "../views/About.vue"),
+    beforeEnter: (to, from, next) => {
+      if (mobile === false) {
+        next("/m/ending");
+        return;
+      }
+
+      next();
+    },
+  },
+  {
     path: "/m",
     name: "MobileLanding",
     component: MobileLanding,
     beforeEnter: (to, from, next) => {
       if (mobile === false) {
         next("/");
+        return;
+      }
+
+      next();
+    },
+  },
+  {
+    path: "/m/ending",
+    name: "MobileEnding",
+    component: () =>
+      import(
+        /* webpackChunkName: "mobileEnding" */ "../views/mobile/Ending.vue"
+      ),
+    beforeEnter: (to, from, next) => {
+      if (mobile === false) {
+        next("/ending");
         return;
       }
 
