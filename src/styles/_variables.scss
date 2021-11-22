@@ -1,62 +1,8 @@
 // color
 $gold: #e1a236;
-$red: #dc6863;
-$yellow: #febd0d;
-$blue: #f4f8f9;
-$light-blue: #fafcfc;
-$black: #282828;
-$dark-gray: #555555;
-$gray: #959595;
-$light-gray: #c7c7c7;
-$lighter-gray: #e5e5e5;
-$white-gray: #eaeaea;
+$black: #393939;
+$gray: #a5a5a5;
+$light-gray: #b5b5b5;
+$white-gray: #e0e0e0;
 $white: #ffffff;
-$green: #33a588;
-$green-2: #8ac926; 
-$gray-2: #ddd;
-$yellow-2 : #ffd03a;
-$gray-3: #b8b8b8;
 
-// basic
-$input-text: #393939;
-
-// login
-$title-color: #6f6f6f;
-
-// recruit detail
-$table-bg-gray: #f8f8f8;
-$table-bg-yellow: #fff4e0;
-$table-bg-light-yellow: #fff8eb;
-
-// vacancy-subject
-$light-gray-2: #efefef;
-
-// report-video
-$light-gray-3: #6e6e6e;
-$light-gray-4: #333;
-$yellow-3: #fff1da;
-
-// report-cat2
-$light-gray-5: #808080;
-$light-gray-6: #f2f2f2;
-$black-2: #000;
-
-// sidebar
-// 這邊換成這樣設定是為了透過 js 變更 css variable
-:root {
-  --main-background-default: transparent;
-  --main-background-active: #e1a236;
-  --main-background-hover: transparent;
-
-  --sub-background-default: rgba(255, 255, 255, 0.15);
-  --sub-background-active: #e1a236;
-  --sub-background-hover: transparent;
-
-  --main-font-default: #ffffff;
-  --main-font-active: #ffffff;
-  --main-font-hover: #ffffff;
-
-  --sub-font-default: #ffffff;
-  --sub-font-active: #ffffff;
-  --sub-font-hover: #ffffff;
-}

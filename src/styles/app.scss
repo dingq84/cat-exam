@@ -1,8 +1,43 @@
-@import "function";
+
 @import "variables";
 
-.flip-list-move {
-  transition: transform 0.5s;
+.heading {
+  font-size: 24px;
+  font-weight: bold;
+  font-stretch: normal;
+  color: $gold;
+  line-height: 0.92;
+  letter-spacing: 0.48px;
+}
+
+.subhead {
+  font-size: 21px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.05;
+  letter-spacing: 0.42px;
+  color: $black;
+}
+
+.select-title {
+  font-size: 17px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.29;
+  letter-spacing: 0.34px;
+  color: $black;
+}
+
+.select-subhead {
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.57;
+  letter-spacing: 0.28px;
+  color: $black;
 }
 
 .text-xs {
@@ -15,8 +50,4 @@
 
 .cursor-pointer {
   cursor: pointer;
-}
-
-.top-line {
-  border-top: 1px solid $light-gray;
 }
