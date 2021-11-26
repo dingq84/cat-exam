@@ -9,7 +9,7 @@ import store from "@/store";
 import { getTimeZone, getLocale } from "@/utils";
 
 axios.defaults.headers.common["Content-Type"] = "application/json";
-axios.defaults.baseURL = process.env.VUE_APP_BASE_API_URL;
+axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 
 // const notLoadingUrlList = [querySimpleAccount];
 

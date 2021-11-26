@@ -22,6 +22,20 @@ const routes = [
     },
   },
   {
+    path: "/question",
+    name: "Question",
+    component: () =>
+      import(/* webpackChunkName: "Question" */ "../views/About.vue"),
+    beforeEnter: (to, from, next) => {
+      if (mobile === false) {
+        next("/m/ending");
+        return;
+      }
+
+      next();
+    },
+  },
+  {
     path: "/ending",
     name: "Ending",
     component: () =>
@@ -49,6 +63,22 @@ const routes = [
     },
   },
   {
+    path: "/m/question",
+    name: "MobileQuestion",
+    component: () =>
+      import(
+        /* webpackChunkName: "mobileQuestion" */ "../views/mobile/Question.vue"
+      ),
+    beforeEnter: (to, from, next) => {
+      if (mobile === false) {
+        next("/question");
+        return;
+      }
+
+      next();
+    },
+  },
+  {
     path: "/m/ending",
     name: "MobileEnding",
     component: () =>
@@ -63,15 +93,6 @@ const routes = [
 
       next();
     },
-  },
-  {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
   },
 ];
 

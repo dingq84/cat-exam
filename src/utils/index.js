@@ -27,16 +27,6 @@ export const setLocale = (language) => {
   localStorage.setItem("language", language.toLowerCase());
 };
 
-// time zone
-export const setTimeZone = (timeZone) => {
-  localStorage.setItem("timeZone", String(timeZone));
-};
-
 export const getTimeZone = () => {
-  const timeZone = localStorage.getItem("timeZone");
-  if (timeZone) {
-    return timeZone;
-  }
-
   return ((new Date().getTimezoneOffset() / 60) * -1).toString();
 };
