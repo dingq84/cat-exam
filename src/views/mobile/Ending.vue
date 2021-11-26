@@ -17,15 +17,16 @@
 .ending {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 
   &-header {
     flex-shrink: 0;
     height: 123px;
-    background-image: url("../../assets/backgrounds/line.png");
+    background-image: url("../../assets/backgrounds/line-ending.png");
   }
 
   &-body {
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
