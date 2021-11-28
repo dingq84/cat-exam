@@ -1,11 +1,6 @@
 <template>
   <div class="d-flex flex-column container" :class="className">
-    <label :for="id" v-if="label">
-      {{ label }}
-    </label>
     <vue-select
-      ref="select"
-      :id="id"
       :options="processedOptions"
       :clearable="false"
       :searchable="false"
@@ -38,25 +33,14 @@ export default {
       type: String,
       default: "",
     },
-    id: {
-      type: String,
-      required: true,
-    },
     options: {
       type: Array,
       required: true,
-    },
-    label: {
-      type: String,
-      default: "",
     },
     showIndicator: {
       type: Boolean,
       default: false,
     },
-  },
-  mounted() {
-    this.$refs.select.open = true;
   },
   computed: {
     processedOptions() {
@@ -77,12 +61,6 @@ $vs-state-active-color: $white;
 .container {
   padding: 0;
 
-  & label {
-    font-size: 0.875rem;
-    color: $black;
-    margin-bottom: 4px;
-  }
-
   & .vs--loading {
     & .vs__open-indicator {
       display: none;
@@ -98,8 +76,6 @@ $vs-state-active-color: $white;
 
       & li {
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
         height: 52px;
         line-height: 50px;
         font-size: 17px;

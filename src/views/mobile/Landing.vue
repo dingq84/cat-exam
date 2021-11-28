@@ -127,7 +127,7 @@ export default {
 
     &-header {
       flex-shrink: 0;
-      padding-top: 18px;
+      padding-top: 10px;
       height: 91.2px;
       display: flex;
       justify-content: flex-end;
