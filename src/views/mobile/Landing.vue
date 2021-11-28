@@ -3,7 +3,14 @@
     <div class="landing-background"></div>
 
     <div class="landing-wrapper">
-      <div class="landing-wrapper-header"></div>
+      <div class="landing-wrapper-header">
+        <CommonSelect
+          className="landing-wrapper-header-select"
+          id="language-select"
+          v-model="selected"
+          :options="options"
+        />
+      </div>
 
       <div class="landing-wrapper-body">
         <div class="landing-wrapper-body-logo"></div>
@@ -71,16 +78,25 @@
 <script>
 import BasicButton from "@/components/basic/Button";
 import CommonCheckbox from "@/components/common/Checkbox";
+import CommonSelect from "@/components/common/Select";
 
 export default {
   name: "Landing",
   components: {
     BasicButton,
     CommonCheckbox,
+    CommonSelect,
   },
   data() {
     return {
       agree: false,
+      selected: "ENGLISH",
+      options: [
+        { Key: "a", Value: "ENGLISH" },
+        { Key: "b", Value: "繁體中文" },
+        { Key: "c", Value: "簡體中文" },
+        { Key: "d", Value: "Tiếng Việt" },
+      ],
     };
   },
 };
@@ -111,7 +127,15 @@ export default {
 
     &-header {
       flex-shrink: 0;
+      padding-top: 18px;
       height: 91.2px;
+      display: flex;
+      justify-content: flex-end;
+
+      &-select {
+        width: 120px;
+        margin-right: 10px;
+      }
     }
 
     &-body {
