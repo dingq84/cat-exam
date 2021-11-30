@@ -4,6 +4,7 @@
 
     <div class="landing-wrapper">
       <div class="landing-wrapper-header">
+        <router-link to="/m/ending">go</router-link>
         <CommonSelect
           className="landing-wrapper-header-select"
           id="language-select"

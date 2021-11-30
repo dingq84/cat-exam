@@ -2,6 +2,9 @@
   <div class="ending">
     <div class="ending-header"></div>
     <div class="ending-body">
+      <div class="ending-body-message">
+        {{ i18nValue("{APP0901}") }}
+      </div>
       <img src="@/assets/backgrounds/people-ending.png" alt="people image" />
       <img
         class="ending-body-logo"
@@ -42,6 +45,15 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    &-message {
+      max-width: 248px;
+      background-image: url("../../assets/backgrounds/message.png");
+      background-size: 100% 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      padding: 5px 10px 15px;
+    }
 
     &-picture {
       max-width: 230px;
