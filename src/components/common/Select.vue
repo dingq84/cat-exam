@@ -10,8 +10,8 @@
         <img
           v-if="showIndicator"
           v-bind="attributes"
-          src="@/assets/icons/message.svg"
-          alt="message icon"
+          src="@/assets/icons/select.png"
+          alt="select icon"
         />
         <span v-else></span>
       </template>
@@ -60,6 +60,9 @@ $vs-state-active-color: $white;
     & ul {
       padding: 0;
       min-width: 120px;
+      border: none;
+      right: 0px;
+      left: initial;
 
       & li {
         white-space: nowrap;
@@ -113,23 +116,18 @@ $vs-state-active-color: $white;
       & input {
         border: none;
         height: 1.8rem;
-        // min-width: 30px;
+        width: 1px;
+        padding: 0;
       }
 
-      // & .vs__actions {
-      //   padding-top: 2px;
+      & .vs__actions {
+        padding-top: 2px;
 
-      //   & img {
-      //     filter: invert(0.3);
-      //     width: 0.875rem;
-      //     height: 0.875rem;
-      //   }
-
-      //   & .vs__spinner {
-      //     width: 0.8rem;
-      //     height: 0.8rem;
-      //   }
-      // }
+        & .vs__spinner {
+          width: 0.8rem;
+          height: 0.8rem;
+        }
+      }
     }
   }
 }

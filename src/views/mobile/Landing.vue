@@ -12,7 +12,6 @@
           />
           <CommonSelect
             className="landing-wrapper-header-select"
-            id="language-select"
             :value="selected"
             @input="handleLanguageChange"
             :options="options"
@@ -85,7 +84,7 @@ import { getI18n, getAssessment } from "@/constants/api";
 import { getLocale, setLocale } from "@/utils";
 
 export default {
-  name: "Landing",
+  name: "MobileLanding",
   components: {
     BasicButton,
     CommonCheckbox,
@@ -106,8 +105,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isLoading: "loading/isLoading",
-      isError: "error/isError",
       i18nValue: "i18n/i18nValue",
     }),
   },
@@ -209,7 +206,13 @@ export default {
 
       &-select {
         width: 120px;
-        margin-right: 10px;
+        margin-right: -40px;
+
+        /deep/ {
+          ul {
+            right: 50px;
+          }
+        }
       }
     }
 

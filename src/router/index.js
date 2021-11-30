@@ -11,7 +11,7 @@ const routes = [
     path: "/",
     name: "Landing",
     component: () =>
-      import(/* webpackChunkName: "Landing" */ "../views/About.vue"),
+      import(/* webpackChunkName: "Landing" */ "../views/desktop/Landing.vue"),
     beforeEnter: (to, from, next) => {
       const { InvitationKey = "" } = to.query;
 
