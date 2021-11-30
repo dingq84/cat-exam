@@ -4,14 +4,20 @@
 
     <div class="landing-wrapper">
       <div class="landing-wrapper-header">
-        <router-link to="/m/ending">go</router-link>
-        <CommonSelect
-          className="landing-wrapper-header-select"
-          id="language-select"
-          :value="selected"
-          @input="handleLanguageChange"
-          :options="options"
-        />
+        <div class="d-flex align-items-center">
+          <img
+            src="@/assets/icons/earth-black.png"
+            alt="earth"
+            :style="{ 'margin-bottom': '1px' }"
+          />
+          <CommonSelect
+            className="landing-wrapper-header-select"
+            id="language-select"
+            :value="selected"
+            @input="handleLanguageChange"
+            :options="options"
+          />
+        </div>
       </div>
 
       <div class="landing-wrapper-body">
