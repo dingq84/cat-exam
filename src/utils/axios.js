@@ -3,7 +3,7 @@ import axios from "axios";
 // constants
 // import { clearTokenErrorCodes } from "@/constants/errorCode.js";
 // import { querySimpleAccount } from "@/constants/api.js";
-
+import router from "@/router";
 import store from "@/store";
 // import i18n from "@/i18n";
 import { getTimeZone, getLocale } from "@/utils";
@@ -11,7 +11,7 @@ import { getTimeZone, getLocale } from "@/utils";
 axios.defaults.headers.common["Content-Type"] = "application/json";
 axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 
-// const notLoadingUrlList = [querySimpleAccount];
+const notLoadingUrlList = [];
 
 export default new (class {
   constructor() {
@@ -24,9 +24,9 @@ export default new (class {
         }
         config.headers["time-zone"] = getTimeZone();
 
-        // if (!notLoadingUrlList.includes(config.url)) {
-        //   store.dispatch("loading/addCounter");
-        // }
+        if (!notLoadingUrlList.includes(config.url)) {
+          store.dispatch("loading/addCounter");
+        }
         return config;
       },
       (error) => {
@@ -43,15 +43,16 @@ export default new (class {
     instance.interceptors.response.use(
       (response) => {
         store.dispatch("loading/subCounter");
-        // const statusCode = response.data.StatusCode;
-        // if (statusCode && statusCode !== 0) {
-        // store.dispatch("error/updateError", {
-        //   title: i18n.t("{ERROR00000}"),
-        //   subtitle: i18n.t(`{ERROR${statusCode}}`),
-        //   content: response.data.ErrorMessage,
-        // });
-        //   throw Promise.reject(new Error("error"));
-        // }
+        const statusCode = response.data.StatusCode;
+        if (statusCode && statusCode !== 0) {
+          router.push({ name: "Error" });
+          // store.dispatch("error/updateError", {
+          //   title: i18n.t("{ERROR00000}"),
+          //   subtitle: i18n.t(`{ERROR${statusCode}}`),
+          //   content: response.data.ErrorMessage,
+          // });
+          throw Promise.reject(new Error("error"));
+        }
         return response;
       },
       (error) => {

@@ -1,7 +1,6 @@
 <template>
   <div class="d-flex flex-column container" :class="className">
     <vue-select
-      :options="processedOptions"
       :clearable="false"
       :searchable="false"
       v-bind="$attrs"
@@ -33,21 +32,9 @@ export default {
       type: String,
       default: "",
     },
-    options: {
-      type: Array,
-      required: true,
-    },
     showIndicator: {
       type: Boolean,
       default: false,
-    },
-  },
-  computed: {
-    processedOptions() {
-      return this.options.map((item) => ({
-        code: item.Key,
-        label: item.Value,
-      }));
     },
   },
 };

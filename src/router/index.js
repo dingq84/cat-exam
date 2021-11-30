@@ -11,10 +11,19 @@ const routes = [
     path: "/",
     name: "Landing",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+      import(/* webpackChunkName: "Landing" */ "../views/About.vue"),
     beforeEnter: (to, from, next) => {
+      const { InvitationKey = "" } = to.query;
+
+      if (InvitationKey === "") {
+        next({ name: "Error" });
+        return;
+      }
+
+      sessionStorage.clear();
+
       if (mobile) {
-        next("/m");
+        next({ name: "MobileLanding", query: to.query });
         return;
       }
 
@@ -27,8 +36,17 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "Question" */ "../views/About.vue"),
     beforeEnter: (to, from, next) => {
-      if (mobile === false) {
-        next("/m/ending");
+      const isLeaving = sessionStorage.getItem("leaving") === "true";
+
+      const { InvitationKey = "" } = to.query;
+
+      if (InvitationKey === "" || isLeaving) {
+        next({ name: "Error" });
+        return;
+      }
+
+      if (mobile) {
+        next({ name: "MobileQuestion", query: to.query });
         return;
       }
 
@@ -41,8 +59,8 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "Ending" */ "../views/About.vue"),
     beforeEnter: (to, from, next) => {
-      if (mobile === false) {
-        next("/m/ending");
+      if (mobile) {
+        next({ name: "MobileEnding", query: to.query });
         return;
       }
 
@@ -54,8 +72,17 @@ const routes = [
     name: "MobileLanding",
     component: MobileLanding,
     beforeEnter: (to, from, next) => {
+      const { InvitationKey = "" } = to.query;
+
+      if (InvitationKey === "") {
+        next({ name: "Error" });
+        return;
+      }
+
+      sessionStorage.clear();
+
       if (mobile === false) {
-        next("/");
+        next({ name: "Landing", query: to.query });
         return;
       }
 
@@ -70,8 +97,16 @@ const routes = [
         /* webpackChunkName: "mobileQuestion" */ "../views/mobile/Question.vue"
       ),
     beforeEnter: (to, from, next) => {
+      const isLeaving = sessionStorage.getItem("leaving") === "true";
+      const { InvitationKey = "" } = to.query;
+
+      if (InvitationKey === "" || isLeaving) {
+        next({ name: "Error" });
+        return;
+      }
+
       if (mobile === false) {
-        next("/question");
+        next({ name: "Question", query: to.query });
         return;
       }
 
@@ -87,12 +122,18 @@ const routes = [
       ),
     beforeEnter: (to, from, next) => {
       if (mobile === false) {
-        next("/ending");
+        next({ name: "Ending", query: to.query });
         return;
       }
 
       next();
     },
+  },
+  {
+    path: "/error",
+    name: "Error",
+    component: () =>
+      import(/* webpackChunkName: "Error" */ "../views/Error.vue"),
   },
 ];
 

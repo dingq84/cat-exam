@@ -3,14 +3,16 @@
     <div class="question-header">
       <img src="@/assets/logo-word.png" alt="lasso logo" />
       <div class="d-flex items-end">
-        <span class="question-header-text">Time</span>
-        <span class="question-header-time">10: 02</span>
+        <span class="question-header-text">{{ i18nValue("{APP0301}") }}</span>
+        <span class="question-header-time">{{
+          `${this.currentMinute}:${this.currentSecond}`
+        }}</span>
       </div>
     </div>
 
     <div class="question-body">
       <div class="question-body-content">
-        <div class="question-body-content-question">
+        <div class="question-body-content-question" v-if="items.length">
           <img src="@/assets/icons/person.png" alt="person icon" />
           <svg
             width="19"
@@ -24,11 +26,13 @@
               fill="currentColor"
             />
           </svg>
-          <div>發生爭執時，我一定先反省我自己</div>
+          <div>{{ items[currentQuestionIndex].Item }}</div>
         </div>
 
-        <div class="question-body-content-answer">
-          <div>4.有時如此</div>
+        <div class="question-body-content-answer" v-if="currentAnswerValue">
+          <div>
+            {{ i18nValue(buttons[Number(currentAnswerValue) - 1].label) }}
+          </div>
           <svg
             width="19"
             height="25"
@@ -47,53 +51,179 @@
       <div class="question-body-answer">
         <div class="question-body-answer-function">
           <span class="question-body-answer-function-title">
-            請在下方選擇最適當的情況：
+            {{ i18nValue("{APP0302}") }}
           </span>
           <div class="question-body-answer-function-buttons">
-            <div>
-              <BasicButton label="1" data-selected="true" />
-              <span>從未如此</span>
-            </div>
-            <div>
-              <BasicButton label="2" />
-              <span>偶爾如此</span>
-            </div>
-            <div>
-              <BasicButton label="3" />
-              <span>較少如此</span>
-            </div>
-            <div>
-              <BasicButton label="4" />
-              <span>有時如此</span>
-            </div>
-            <div>
-              <BasicButton label="5" />
-              <span>經常如此</span>
-            </div>
-            <div>
-              <BasicButton label="6" />
-              <span>總是如此</span>
+            <div v-for="button in buttons" :key="button.value">
+              <BasicButton
+                :label="button.value"
+                :data-selected="
+                  (button.value === currentAnswerValue).toString()
+                "
+                @click.stop="handleAnswerClick(button.value)"
+              />
+              <span>{{ i18nValue(button.label) }}</span>
             </div>
           </div>
         </div>
 
         <div class="question-body-answer-progress">
           <div class="question-body-answer-progress-bar">
-            <div class="question-body-answer-progress-bar-current"></div>
+            <div
+              class="question-body-answer-progress-bar-current"
+              :style="{ width: progress }"
+            ></div>
           </div>
-          <span class="question-body-answer-progress-number">96%</span>
+          <span class="question-body-answer-progress-number">
+            {{ progress }}
+          </span>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
+import { differenceInMinutes, differenceInSeconds, format } from "date-fns";
+
 import BasicButton from "@/components/basic/Button";
+
+import { getAssessment, updateAssessmentScales } from "@/constants/api";
 
 export default {
   name: "MobileQuestion",
   components: {
     BasicButton,
+  },
+  data() {
+    return {
+      buttons: [
+        {
+          label: "{APP0802}",
+          value: "1",
+        },
+        {
+          label: "{APP0803}",
+          value: "2",
+        },
+        {
+          label: "{APP0804}",
+          value: "3",
+        },
+        {
+          label: "{APP0805}",
+          value: "4",
+        },
+        {
+          label: "{APP0806}",
+          value: "5",
+        },
+        {
+          label: "{APP0807}",
+          value: "6",
+        },
+      ],
+      invitationKey: "",
+      question: {},
+      items: [],
+      currentQuestionIndex: 0,
+      currentAnswerValue: "",
+      startTime: new Date(),
+      endTime: new Date(),
+    };
+  },
+  mounted() {
+    sessionStorage.setItem("leaving", "true");
+    const { InvitationKey = "" } = this.$route.query;
+    this.invitationKey = decodeURIComponent(encodeURIComponent(InvitationKey));
+    this.getQuestions();
+    this.clock();
+  },
+  computed: {
+    ...mapGetters({
+      i18nValue: "i18n/i18nValue",
+    }),
+    progress() {
+      if (this.items.length === 0) {
+        return "0%";
+      }
+
+      return `${Math.floor(
+        (this.currentQuestionIndex / this.items.length) * 100
+      )}%`;
+    },
+    currentMinute() {
+      return `0${differenceInMinutes(this.endTime, this.startTime)}`.slice(-2);
+    },
+    currentSecond() {
+      return `0${
+        differenceInSeconds(this.endTime, this.startTime) -
+        Number(this.currentMinute) * 60
+      }`.slice(-2);
+    },
+  },
+  methods: {
+    clock() {
+      this.endTime = new Date().getTime();
+
+      setTimeout(() => {
+        this.clock();
+      }, 1000);
+    },
+    getQuestions() {
+      this.axios
+        .post(getAssessment, {
+          Conditions: [
+            {
+              InvitationKey: this.invitationKey,
+            },
+          ],
+        })
+        .then(({ data }) => {
+          const { Results } = data;
+          this.question = Results[0];
+          this.items = Results[0].Items;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    handleAnswerClick(value) {
+      if (this.currentAnswerValue !== "") {
+        return;
+      }
+
+      this.currentAnswerValue = value;
+      this.items[this.currentQuestionIndex].Scale = Number(value);
+      setTimeout(() => {
+        this.currentQuestionIndex += 1;
+        this.currentAnswerValue = "";
+
+        if (this.currentQuestionIndex === this.items.length) {
+          this.submit();
+        }
+      }, 1000);
+    },
+    async submit() {
+      try {
+        await this.axios.post(updateAssessmentScales, {
+          Contents: [
+            {
+              InvitationKey: this.invitationKey,
+              AnswerStartTime: format(this.startTime, "yyyy-MM-dd'T'HH:mm:ss"),
+              AnswerEndTime: format(this.endTime, "yyyy-MM-dd'T'HH:mm:ss"),
+              Items: this.items.map((item) => ({
+                ItemId: item.ItemId,
+                Scale: item.Scale,
+              })),
+            },
+          ],
+        });
+        this.$router.push({ name: "MobileEnding" });
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 };
 </script>
@@ -104,6 +234,7 @@ $progress-width: 15px;
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 
   &-header {
     flex-shrink: 0;
@@ -154,6 +285,7 @@ $progress-width: 15px;
     background-position: top center, bottom center;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 
     &-content {
       flex-grow: 1;
@@ -298,8 +430,8 @@ $progress-width: 15px;
             left: 0;
             top: 0;
             height: 13px;
-            width: 96%;
             border-radius: 15px;
+            transition: width 0.5s;
             background: repeating-linear-gradient(
               115deg,
               #ebc274 0 $progress-width,

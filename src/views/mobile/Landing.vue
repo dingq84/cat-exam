@@ -7,25 +7,24 @@
         <CommonSelect
           className="landing-wrapper-header-select"
           id="language-select"
-          v-model="selected"
+          :value="selected"
+          @input="handleLanguageChange"
           :options="options"
         />
       </div>
 
       <div class="landing-wrapper-body">
         <div class="landing-wrapper-body-logo"></div>
-        <div class="landing-wrapper-body-content">
-          填答時，請仔細閱讀每項敘述，然後判斷該敘述與您目前實際情況符合程度。並沒有標準答案，請您依照自身真實狀況進行填答。
-          測評有特殊設計，會從各方面評估您測評結果的可參考度，請認真專注在每一題的作答即可。
-          CAT職能認知測評結果報告會同時提供面談參考題目，讓企業可以進一步深入詢問並了解您的相關經驗與職能等級。
-          如果您已經準備就緒，請點選確認按鈕開始作答。
-        </div>
+        <div
+          class="landing-wrapper-body-content"
+          v-html="i18nValue('{APP0101}')"
+        ></div>
         <div class="landing-wrapper-body-policy">
           <div
             v-b-toggle.privacy
             class="d-inline-flex align-items-center justify-content-center"
           >
-            <small>隱私權政策</small>
+            <small>{{ i18nValue("{APP0103}") }}</small>
             <b-icon-caret-up-fill font-scale="0.5" class="ml-1" />
           </div>
         </div>
@@ -36,28 +35,15 @@
                 v-b-toggle.privacy
                 class="landing-wrapper-body-privacy-title"
               >
-                隱私權政策
+                {{ i18nValue("{APP0103}") }}
               </span>
 
               <b-icon-caret-down-fill font-scale="0.5" />
             </div>
-            <div class="landing-wrapper-body-privacy-wrapper">
-              <div class="landing-wrapper-body-privacy-wrapper-prefix">
-                歡迎您光臨CAT職能認知測評平台(以下稱「本平台」)，本平台是由鼎恒數位科技股份有限公司
-                (以下稱「本公司」)所提供，本平台謹依個人資料保護法（以下簡稱個資法）與本《隱私權政策》搜集、處理及利用您的個人資料，並承諾尊重以及保護您個人於本平台的隱私權。特此說明本平台的隱私權政策，以保障您的權益。請您細讀以下有關本政策的內容：
-              </div>
-              <div class="landing-wrapper-body-privacy-wrapper-subtitle">
-                適用範圍
-              </div>
-              <ol class="landing-wrapper-body-privacy-wrapper-list">
-                <li>
-                  您使用本平台時，所涉及的個人資料蒐集、處理與相關利用行為，均受到本隱私權政策之保護。基於對個人權益的維護及尊重，本平台對於個人資料之蒐集、處理及利用，將以誠實及信用方法為之，除有法律特別規定外，不會逾越特定目的之必要範圍，並與蒐集之目的具有正當合理之關聯。
-                </li>
-                <li>
-                  您使用本平台時，所涉及的個人資料蒐集、處理與相關利用行為，均受到本隱私權政策之保護。基於對個人權益的維護及尊重，本平台對於個人資料之蒐集、處理及利用，將以誠實及信用方法為之，除有法律特別規定外，不會逾越特定目的之必要範圍，並與蒐集之目的具有正當合理之關聯。
-                </li>
-              </ol>
-            </div>
+            <div
+              class="landing-wrapper-body-privacy-wrapper"
+              v-html="privacy"
+            ></div>
           </div>
         </b-collapse>
       </div>
@@ -66,19 +52,30 @@
     <div class="landing-footer">
       <div class="landing-footer-line"></div>
       <CommonCheckbox
-        label="我同意隱私權政策"
+        :label="`${i18nValue('{APP0102}')}${i18nValue('{APP0103}')}`"
         :checked="agree"
         @input="(value) => (agree = value)"
       />
-      <BasicButton label="START" :disabled="agree === false" />
+
+      <BasicButton
+        label="START"
+        :disabled="agree === false"
+        @click="goToQuestion"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+
 import BasicButton from "@/components/basic/Button";
 import CommonCheckbox from "@/components/common/Checkbox";
 import CommonSelect from "@/components/common/Select";
+
+import { getI18n, getAssessment } from "@/constants/api";
+
+import { getLocale, setLocale } from "@/utils";
 
 export default {
   name: "Landing",
@@ -90,14 +87,84 @@ export default {
   data() {
     return {
       agree: false,
-      selected: "ENGLISH",
+      selected: getLocale(),
       options: [
-        { Key: "a", Value: "ENGLISH" },
-        { Key: "b", Value: "繁體中文" },
-        { Key: "c", Value: "簡體中文" },
-        { Key: "d", Value: "Tiếng Việt" },
+        { code: "en-us", label: "ENGLISH" },
+        { code: "zh-tw", label: "繁體中文" },
+        { code: "zh-cn", label: "簡體中文" },
+        { code: "vi-vn", label: "Tiếng Việt" },
       ],
+      privacy: "",
     };
+  },
+  computed: {
+    ...mapGetters({
+      isLoading: "loading/isLoading",
+      isError: "error/isError",
+      i18nValue: "i18n/i18nValue",
+    }),
+  },
+  mounted() {
+    const { InvitationKey = "" } = this.$route.query;
+    if (InvitationKey === "") {
+      this.$router.push({ name: "Error" });
+      return;
+    }
+
+    const locale = getLocale();
+    this.selected = this.options.find((option) => option.code === locale);
+    this.getI18nEnums();
+    this.invitationKey = decodeURIComponent(encodeURIComponent(InvitationKey));
+    this.getQuestions();
+  },
+  methods: {
+    ...mapActions({
+      setI18nEnums: "i18n/setI18nEnums",
+    }),
+    getI18nEnums() {
+      this.axios
+        .post(getI18n, {
+          Conditions: [
+            {
+              TypeCode: "I18N_CLIENT",
+            },
+          ],
+        })
+        .then((data) => {
+          this.setI18nEnums(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    getQuestions() {
+      this.axios
+        .post(getAssessment, {
+          Conditions: [
+            {
+              InvitationKey: this.invitationKey,
+            },
+          ],
+        })
+        .then(({ data }) => {
+          const { Results } = data;
+          this.privacy = Results[0].PrivacyPolicy;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    handleLanguageChange(value) {
+      this.selected = value;
+      setLocale(value.code);
+      this.$nextTick(() => {
+        this.getI18nEnums();
+        this.getQuestions();
+      });
+    },
+    goToQuestion() {
+      this.$router.push({ name: "MobileQuestion", query: this.$route.query });
+    },
   },
 };
 </script>
@@ -124,6 +191,7 @@ export default {
     display: flex;
     flex-direction: column;
     z-index: 1;
+    overflow: hidden;
 
     &-header {
       flex-shrink: 0;
@@ -139,12 +207,13 @@ export default {
     }
 
     &-body {
-      overflow-y: auto;
+      overflow: hidden;
       flex-grow: 1;
       display: flex;
       flex-direction: column;
 
       &-logo {
+        flex-shrink: 0;
         margin: 29.8px 0 29px;
         width: 258px;
         height: 65px;
@@ -166,6 +235,7 @@ export default {
         letter-spacing: 0.34px;
         color: $black;
         flex-grow: 1;
+        overflow-y: auto;
       }
 
       &-policy {

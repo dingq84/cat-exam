@@ -13,6 +13,18 @@
     <div class="ending-footer"></div>
   </div>
 </template>
+<script>
+import { mapGetters } from "vuex";
+
+export default {
+  name: "MobileEnding",
+  computed: {
+    ...mapGetters({
+      i18nValue: "i18n/i18nValue",
+    }),
+  },
+};
+</script>
 <style lang="scss" scoped>
 .ending {
   display: flex;
@@ -30,6 +42,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    &-picture {
+      max-width: 230px;
+      max-height: 119.5px;
+      object-fit: contain;
+    }
 
     &-logo {
       margin: 38.5px 0 10px;
