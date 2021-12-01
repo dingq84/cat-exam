@@ -1,10 +1,6 @@
 <template>
   <div id="app">
-    <div v-if="isLoading" class="overlay text-light">
-      <div class="spinner-border" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-    </div>
+    <div v-if="isLoading" class="loading"></div>
 
     <router-view />
   </div>
@@ -32,17 +28,17 @@ export default {
   color: $black;
 }
 
-.overlay {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
+.loading {
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: $black;
-  opacity: 0.5;
-  z-index: 9999;
+  bottom: 0;
+  right: 0;
+  background-position: center center, center right;
+  background-size: contain, 100%;
+  background-image: url("./assets/backgrounds/loading.png"),
+    linear-gradient($white, $white);
+  background-repeat: no-repeat, repeat;
+  z-index: 10;
 }
 </style>

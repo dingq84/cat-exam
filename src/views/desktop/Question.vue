@@ -1,7 +1,7 @@
 <template>
   <div class="question">
     <div class="question-header">
-      <img src="@/assets/logo-word.png" alt="lasso logo" />
+      <img src="@/assets/logo-white.png" alt="logo" />
       <div class="d-flex items-end">
         <span class="question-header-text">{{ i18nValue("{APP0301}") }}</span>
         <span class="question-header-time">
@@ -10,9 +10,25 @@
       </div>
     </div>
 
+    <div class="question-subheader">
+      <span class="question-subheader-hint">{{ i18nValue("{APP0801}") }}</span>
+
+      <div class="question-subheader-progress">
+        <div class="question-subheader-progress-bar">
+          <div
+            class="question-subheader-progress-bar-current"
+            :style="{ width: progress }"
+          ></div>
+        </div>
+        <span class="question-subheader-progress-number">
+          {{ progress }}
+        </span>
+      </div>
+    </div>
+
     <div class="question-body">
-      <div class="question-body-content">
-        <div class="question-body-content-question" v-if="items.length">
+      <div class="question-body-wrapper">
+        <div class="question-body-wrapper-question" v-if="items.length">
           <img src="@/assets/icons/person.png" alt="person icon" />
           <svg
             width="19"
@@ -29,7 +45,7 @@
           <div>{{ items[currentQuestionIndex].Item }}</div>
         </div>
 
-        <div class="question-body-content-answer" v-if="currentAnswerValue">
+        <div class="question-body-wrapper-answer" v-if="currentAnswerValue">
           <div>
             {{ i18nValue(buttons[Number(currentAnswerValue) - 1].label) }}
           </div>
@@ -49,35 +65,24 @@
       </div>
 
       <div class="question-body-answer">
-        <div class="question-body-answer-function">
-          <span class="question-body-answer-function-title">
-            {{ i18nValue("{APP0302}") }}
-          </span>
-          <div class="question-body-answer-function-buttons">
-            <div v-for="button in buttons" :key="button.value">
-              <BasicButton
-                :label="button.value"
-                :data-selected="
-                  (button.value === currentAnswerValue).toString()
-                "
-                @click.stop="handleAnswerClick(button.value)"
-              />
-              <span>{{ i18nValue(button.label) }}</span>
-            </div>
-          </div>
+        <span class="question-body-answer-title">
+          {{ i18nValue("{APP0302}") }}
+        </span>
+        <div class="question-body-answer-buttons">
+          <BasicButton
+            v-for="button in buttons"
+            :key="button.value"
+            :label="i18nValue(button.label)"
+            :data-selected="(button.value === currentAnswerValue).toString()"
+            @click.stop="handleAnswerClick(button.value)"
+          />
         </div>
+      </div>
 
-        <div class="question-body-answer-progress">
-          <div class="question-body-answer-progress-bar">
-            <div
-              class="question-body-answer-progress-bar-current"
-              :style="{ width: progress }"
-            ></div>
-          </div>
-          <span class="question-body-answer-progress-number">
-            {{ progress }}
-          </span>
-        </div>
+      <div class="question-body-footer">
+        <small class="question-body-footer-copy">
+          by MAYO Human Capital Inc.
+        </small>
       </div>
     </div>
   </div>
@@ -91,7 +96,7 @@ import BasicButton from "@/components/basic/Button";
 import { getAssessment, updateAssessmentScales } from "@/constants/api";
 
 export default {
-  name: "MobileQuestion",
+  name: "Question",
   components: {
     BasicButton,
   },
@@ -219,7 +224,7 @@ export default {
             },
           ],
         });
-        this.$router.push({ name: "MobileEnding" });
+        this.$router.push({ name: "Ending" });
       } catch (error) {
         console.error(error);
       }
@@ -234,63 +239,116 @@ $progress-width: 15px;
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-x: auto;
+  min-width: 1320px;
 
   &-header {
-    flex-shrink: 0;
-    height: 55px;
-    background-color: $white;
-    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.1);
+    height: 70px;
+    background-color: $gold;
+    padding: 0 154px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 17px 16px 18px 21px;
+    justify-content: space-between;
 
     &-text {
       display: inline-block;
       margin-top: 1px;
-      font-size: 14px;
+      font-size: 19px;
       font-weight: normal;
       font-stretch: normal;
       font-style: normal;
-      line-height: 1.57;
+      line-height: 30px;
       letter-spacing: -0.01px;
-      color: $gray;
+      color: $white;
     }
 
     &-time {
       display: inline-block;
       margin-top: 1px;
-      margin-left: 10px;
+      margin-left: 16px;
+      font-size: 19px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 30px;
+      letter-spacing: -0.01px;
+      color: $white;
+    }
+  }
+
+  &-subheader {
+    height: 64px;
+    background-color: $yellow-1;
+    padding: 0 154px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &-hint {
       font-size: 14px;
       font-weight: normal;
       font-stretch: normal;
       font-style: normal;
-      line-height: 1.57;
-      letter-spacing: -0.01px;
-      color: $gold;
+      line-height: 22px;
+      letter-spacing: 0.28px;
+      color: $gray-3;
+    }
+
+    &-progress {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 330px;
+
+      &-bar {
+        border-radius: 15px;
+        background-color: rgba(253, 253, 253, 0.87);
+        margin-right: 22px;
+        height: 13px;
+        flex-grow: 1;
+        position: relative;
+
+        &-current {
+          position: absolute;
+          left: 0;
+          top: 0;
+          height: 13px;
+          border-radius: 15px;
+          transition: width 0.5s;
+          background: repeating-linear-gradient(
+            115deg,
+            #ebc274 0 $progress-width,
+            rgba(225, 162, 54, 1) $progress-width $progress-width * 2
+          );
+        }
+      }
+
+      &-number {
+        flex-shrink: 0;
+        font-size: 16px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.38;
+        letter-spacing: -0.01px;
+        color: $gold;
+      }
     }
   }
 
   &-body {
     flex-grow: 1;
-    background-image: url("../../assets/backgrounds/people-question.png"),
-      linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0),
-        rgba(62, 60, 60, 0) 87%,
-        #4e4e4e 96%
-      );
-    background-repeat: no-repeat, no-repeat;
-    background-position: top center, bottom center;
+    overflow: hidden;
+    background: url("../../assets/backgrounds/people-walk.png");
+    box-shadow: inset 0 0 0 2000px rgba(62, 60, 60, 0.95);
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    justify-content: flex-end;
 
-    &-content {
+    &-wrapper {
+      padding: 54px 154px 0;
       flex-grow: 1;
       overflow-y: auto;
-      padding: 40px 16px;
 
       &-question {
         display: flex;
@@ -323,9 +381,9 @@ $progress-width: 15px;
       &-answer {
         display: flex;
         align-items: center;
-        margin-top: 143px;
-        max-width: 45%;
+        margin-top: 90px;
         float: right;
+        max-width: 45%;
 
         & > svg {
           width: 15px;
@@ -350,108 +408,67 @@ $progress-width: 15px;
 
     &-answer {
       flex-shrink: 0;
-      margin: 0 16px 14px;
+      background-color: $white-gray;
+      width: 588px;
+      height: 216px;
+      margin: 20px 154px 20px auto;
+      border-radius: 10px;
+      padding: 14px 20px;
 
-      &-function {
-        margin-bottom: 14px;
-        padding: 10px 19px 9px 18px;
-        border-radius: 10px;
-        background-color: rgba(255, 255, 255, 0.85);
-
-        &-title {
-          font-size: 17px;
-          font-weight: 500;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: 1.29;
-          letter-spacing: -0.01px;
-          color: $black;
-        }
-
-        &-buttons {
-          margin-top: 9px;
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          grid-template-rows: repeat(2, 1fr);
-          grid-gap: 2px 16px;
-
-          & > div {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-
-            & > button {
-              width: 100%;
-              height: 43px;
-              margin-bottom: 2px;
-              padding: 10px 0;
-              border-radius: 5px;
-              background-color: $white;
-              color: $black;
-              font-size: 17px;
-              font-weight: normal;
-              font-stretch: normal;
-              font-style: normal;
-              line-height: 1.29;
-              letter-spacing: -0.01px;
-
-              &[data-selected="true"] {
-                color: $white;
-                background-color: $gold;
-              }
-            }
-
-            & > span {
-              font-size: 14px;
-              font-weight: normal;
-              font-stretch: normal;
-              font-style: normal;
-              line-height: 1.57;
-              letter-spacing: -0.01px;
-              color: $black;
-            }
-          }
-        }
+      &-title {
+        font-size: 14px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 22px;
+        letter-spacing: -0.01px;
+        color: $gold;
       }
 
-      &-progress {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+      &-buttons {
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        grid-gap: 14px 10px;
 
-        &-bar {
-          border-radius: 15px;
-          background-color: rgba(255, 239, 211, 0.3);
-          margin-right: 22px;
-          height: 13px;
-          flex-grow: 1;
-          position: relative;
-
-          &-current {
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 13px;
-            border-radius: 15px;
-            transition: width 0.5s;
-            background: repeating-linear-gradient(
-              115deg,
-              #ebc274 0 $progress-width,
-              rgba(225, 162, 54, 1) $progress-width $progress-width * 2
-            );
-          }
-        }
-
-        &-number {
-          flex-shrink: 0;
-          font-size: 16px;
+        & > button {
+          width: 100%;
+          height: 44px;
+          padding: 12px 0;
+          border-radius: 6px;
+          background-color: $white;
+          color: $black;
+          font-size: 14px;
           font-weight: normal;
           font-stretch: normal;
           font-style: normal;
-          line-height: 1.38;
-          letter-spacing: -0.01px;
-          color: $gold;
+          line-height: 22px;
+          letter-spacing: 0.28px;
+
+          &[data-selected="true"] {
+            color: $white;
+            background-color: $gold;
+          }
         }
+      }
+    }
+
+    &-footer {
+      flex-shrink: 0;
+      height: 30px;
+      background-color: $gold;
+      padding-right: 154px;
+
+      &-copy {
+        font-size: 12px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 30px;
+        letter-spacing: 0.24px;
+        float: right;
+        color: $white;
       }
     }
   }

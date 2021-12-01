@@ -34,7 +34,9 @@ const routes = [
     path: "/question",
     name: "Question",
     component: () =>
-      import(/* webpackChunkName: "Question" */ "../views/About.vue"),
+      import(
+        /* webpackChunkName: "Question" */ "../views/desktop/Question.vue"
+      ),
     beforeEnter: (to, from, next) => {
       const isLeaving = sessionStorage.getItem("leaving") === "true";
 
@@ -57,7 +59,7 @@ const routes = [
     path: "/ending",
     name: "Ending",
     component: () =>
-      import(/* webpackChunkName: "Ending" */ "../views/About.vue"),
+      import(/* webpackChunkName: "Ending" */ "../views/desktop/Ending.vue"),
     beforeEnter: (to, from, next) => {
       if (mobile) {
         next({ name: "MobileEnding", query: to.query });

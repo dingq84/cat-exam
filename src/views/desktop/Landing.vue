@@ -145,7 +145,7 @@ export default {
       });
     },
     goToQuestion() {
-      this.$router.push({ name: "MobileQuestion", query: this.$route.query });
+      this.$router.push({ name: "Question", query: this.$route.query });
     },
   },
 };
@@ -270,6 +270,12 @@ export default {
       left: 50%;
       top: -25px;
       transform: translateX(-50%);
+
+      &:not([data-disabled="true"]) {
+        border: 2px solid $gold;
+        background-color: $white;
+        color: $gold;
+      }
     }
 
     &-copy {
