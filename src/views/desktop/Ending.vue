@@ -38,8 +38,10 @@ export default {
   &-header {
     flex-shrink: 0;
     margin-top: 41.7px;
-    height: 60px;
-    background-image: url("../../assets/backgrounds/line-ending.png");
+    height: 65px;
+    background-image: url("../../assets/backgrounds/path-desktop.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
   }
 
   &-body {
@@ -78,9 +80,11 @@ export default {
 
   &-footer {
     flex-shrink: 0;
-    height: 75.8px;
-    margin-bottom: 36.7px;
-    background-image: url("../../assets/backgrounds/line-double.png");
+    height: 93px;
+    margin-bottom: 30px;
+    background-image: url("../../assets/backgrounds/mask-desktop.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
   }
 }
 </style>

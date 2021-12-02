@@ -31,11 +31,10 @@ export default new (class {
       },
       (error) => {
         store.dispatch("loading/subCounter");
-        // store.dispatch("error/updateError", {
-        //   title: i18n.t("{ERROR00000}"),
-        //   subtitle: "",
-        //   content: i18n.t("{ERROR10001}"),
-        // });
+        store.dispatch("error/updateError", {
+          code: "9999",
+          message: "",
+        });
         return Promise.reject(error);
       }
     );
@@ -46,22 +45,20 @@ export default new (class {
         const statusCode = response.data.StatusCode;
         if (statusCode && statusCode !== 0) {
           router.push({ name: "Error" });
-          // store.dispatch("error/updateError", {
-          //   title: i18n.t("{ERROR00000}"),
-          //   subtitle: i18n.t(`{ERROR${statusCode}}`),
-          //   content: response.data.ErrorMessage,
-          // });
+          store.dispatch("error/updateError", {
+            code: statusCode,
+            message: response.data.ErrorMessage,
+          });
           throw Promise.reject(new Error("error"));
         }
         return response;
       },
       (error) => {
         store.dispatch("loading/subCounter");
-        // store.dispatch("error/updateError", {
-        //   title: i18n.t("{ERROR00000}"),
-        //   subtitle: "",
-        //   content: i18n.t("{ERROR10001}"),
-        // });
+        store.dispatch("error/updateError", {
+          code: "9999",
+          message: "",
+        });
 
         return Promise.reject(error);
       }

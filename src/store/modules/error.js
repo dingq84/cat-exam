@@ -1,19 +1,16 @@
 const state = () => ({
-  title: "",
-  content: "",
-  subtitle: "",
+  code: "",
+  message: "",
 });
 
 const mutations = {
   UPDATE_ERROR(state, payload) {
-    state.title = payload.title;
-    state.content = payload.content;
-    state.subtitle = payload.subtitle;
+    state.code = payload.code;
+    state.message = payload.message;
   },
   RESET_ERROR(state) {
-    state.title = "";
-    state.content = "";
-    state.subtitle = "";
+    state.code = "";
+    state.message = "";
   },
 };
 
@@ -27,10 +24,9 @@ const actions = {
 };
 
 const getters = {
-  isError: (state) => Boolean(state.title) || Boolean(state.content),
-  title: (state) => state.title,
-  content: (state) => state.content,
-  subtitle: (state) => state.subtitle,
+  isError: (state) => Boolean(state.code) || Boolean(state.message),
+  code: (state) => state.code,
+  message: (state) => state.message,
 };
 
 export default {
