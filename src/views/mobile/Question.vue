@@ -294,8 +294,7 @@ $progress-width: 15px;
 
       &-question {
         display: flex;
-        align-items: center;
-        max-width: 45%;
+        align-items: flex-start;
 
         & > img {
           margin-right: 12px;
@@ -324,7 +323,6 @@ $progress-width: 15px;
         display: flex;
         align-items: center;
         margin-top: 143px;
-        max-width: 45%;
         float: right;
 
         & > svg {

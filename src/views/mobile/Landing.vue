@@ -203,14 +203,18 @@ export default {
       height: 91.2px;
       display: flex;
       justify-content: flex-end;
+      background-image: linear-gradient(
+        to top,
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0.9) 64%
+      );
 
       &-select {
-        width: 120px;
-        margin-right: -40px;
+        width: 88px;
 
         /deep/ {
           ul {
-            right: 50px;
+            right: 10px;
           }
         }
       }
@@ -354,6 +358,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     z-index: 2;
+    background-color: $white;
 
     &-line {
       position: absolute;
@@ -361,7 +366,7 @@ export default {
       width: 100%;
       left: 0;
       bottom: 23.2px;
-      height: 37.5px;
+      height: 39px;
       background-image: url("../../assets/backgrounds/line.png");
     }
   }

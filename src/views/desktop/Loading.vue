@@ -23,6 +23,7 @@ export default {
   right: 0;
   display: flex;
   flex-direction: column;
+  background-color: $white;
 
   &-header {
     flex-shrink: 0;
@@ -39,7 +40,6 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: $white;
 
     & > img:first-child {
       margin-bottom: 10.6px;

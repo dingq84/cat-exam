@@ -352,7 +352,7 @@ $progress-width: 15px;
 
       &-question {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         max-width: 45%;
 
         & > img {

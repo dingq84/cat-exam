@@ -60,9 +60,9 @@ $vs-state-active-color: $white;
     & ul {
       padding: 0;
       min-width: 120px;
-      border: none;
       right: 0px;
       left: initial;
+      border: solid 1px $gold !important;
 
       & li {
         white-space: nowrap;
@@ -78,6 +78,11 @@ $vs-state-active-color: $white;
           color: $white;
           background-color: $gold;
         }
+      }
+
+      & .vs__dropdown-option--selected {
+        color: $white;
+        background-color: $gold;
       }
     }
 

@@ -162,7 +162,7 @@ export default {
 
   &-header {
     position: relative;
-    z-index: 1;
+    z-index: 10;
     height: 70px;
     background-color: $gold;
     padding: 0 32px;
