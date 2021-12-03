@@ -19,7 +19,7 @@
       <div class="landing-body-header">
         <img
           class="landing-body-header-logo"
-          src="@/assets/logo-word-desktop.png"
+          src="@/assets/logo-desktop.png"
           alt="logo"
         />
         <img
